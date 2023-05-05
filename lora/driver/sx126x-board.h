@@ -127,6 +127,16 @@ void SX126xAntSwOn( void );
 void SX126xAntSwOff( void );
 
 /*!
+ * \brief Switch the RF Switch to TX mode
+ */
+void SX126xAntSwTx( void );
+
+/*!
+ * \brief Switch the RF Switch to RX mode
+ */
+void SX126xAntSwRx( void );
+
+/*!
  * \brief Checks if the given RF frequency is supported by the hardware
  *
  * \param [IN] frequency RF frequency to be checked
