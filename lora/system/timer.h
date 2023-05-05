@@ -66,7 +66,7 @@ typedef uint64_t TimerTime_t;
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */ 
+/* Exported functions ------------------------------------------------------- */
 /*!
  * \brief Number of seconds elapsed between Unix and GPS epoch
  */
@@ -128,7 +128,7 @@ static inline TimerSysTime_t TimerSubSysTime( TimerSysTime_t a, TimerSysTime_t b
 /*!
  * \brief Sets the system time with the number of sconds elapsed since epoch
  *
- * \param [IN] sysTime Structure provideing the number of seconds and 
+ * \param [IN] sysTime Structure provideing the number of seconds and
  *                     subseconds elapsed since epoch
   */
 void TimerSetSysTime( TimerSysTime_t sysTime );
@@ -136,7 +136,7 @@ void TimerSetSysTime( TimerSysTime_t sysTime );
 /*!
  * \brief Gets the current system number of sconds elapsed since epoch
  *
- * \retval sysTime Structure provideing the number of seconds and 
+ * \retval sysTime Structure provideing the number of seconds and
  *                 subseconds elapsed since epoch
   */
 TimerSysTime_t TimerGetSysTime( void );
@@ -236,6 +236,17 @@ TimerTime_t TimerTempCompensation( TimerTime_t period, float temperature );
  * \brief Manages the entry into ARM cortex deep-sleep mode
  */
 void TimerLowPowerHandler( void );
+
+/*!
+ * \brief block the entry into ARM cortex deep-sleep mode
+ */
+void TimerLowPowerBlock (uint32_t flags);
+
+/*!
+ * \brief unblock the entry into ARM cortex deep-sleep mode
+ */
+void TimerLowPowerUnblock (uint32_t flags);
+
 
 #ifdef __cplusplus
 }

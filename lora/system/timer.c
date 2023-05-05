@@ -42,6 +42,7 @@
     }while( 0 );
 volatile uint8_t HasLoopedThroughMain = 0;
 static TimerTime_t g_systime_ref = 0;
+static uint32_t TimerLowerPowerBlockFlag = 0;
 
 /*!
  * Timers list head pointer
@@ -90,7 +91,7 @@ void TimerSetSysTime( TimerSysTime_t sysTime )
 {
     TimerTime_t cur_time = RtcGetTimerValue( );
     TimerTime_t set_time = (TimerTime_t)sysTime.Seconds*1000 + sysTime.SubSeconds;
-    
+
     g_systime_ref = set_time - cur_time;
 }
 
@@ -106,11 +107,11 @@ TimerSysTime_t TimerGetSysTime( void )
 }
 
 static void TimeStampsUpdate()
-{    
-    TimerTime_t old =  RtcGetTimerContext(); 
-    TimerTime_t now =  RtcSetTimerContext(); 
+{
+    TimerTime_t old =  RtcGetTimerContext();
+    TimerTime_t now =  RtcSetTimerContext();
     uint32_t DeltaContext = (uint32_t)(now - old);
-    
+
     TimerEvent_t* cur = TimerListHead;
     while(cur) {
         if (cur->Timestamp > DeltaContext)
@@ -354,7 +355,7 @@ void TimerReset( TimerEvent_t *obj )
 void TimerSetValue( TimerEvent_t *obj, uint32_t value )
 {
     TimerStop( obj );
-    
+
     obj->Timestamp = value;
     obj->ReloadValue = value;
 }
@@ -379,7 +380,7 @@ static void TimerSetTimeout( TimerEvent_t *obj )
 TimerTime_t TimerTempCompensation( TimerTime_t period, float temperature )
 {
     (void)temperature;
-    
+
     return period;
 }
 
@@ -391,6 +392,7 @@ void TimerProcess( void )
 void TimerLowPowerHandler( void )
 {
     //if( ( TimerListHead != NULL ) && ( TimerListHead->IsRunning == true ) )
+    if( TimerLowerPowerBlockFlag == 0 )
     {
         if( HasLoopedThroughMain < 5 )
         {
@@ -402,4 +404,18 @@ void TimerLowPowerHandler( void )
             RtcEnterLowPowerStopMode( );
         }
     }
+}
+
+void TimerLowPowerBlock (uint32_t flags)
+{
+    BoardDisableIrq( );
+    TimerLowerPowerBlockFlag |= flags;
+    BoardEnableIrq( );
+}
+
+void TimerLowPowerUnblock (uint32_t flags)
+{
+    BoardDisableIrq( );
+    TimerLowerPowerBlockFlag &= ~flags;
+    BoardEnableIrq( );
 }
