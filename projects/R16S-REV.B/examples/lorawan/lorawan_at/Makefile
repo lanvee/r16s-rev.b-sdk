@@ -13,7 +13,16 @@ $(PROJECT)_SOURCE := $(wildcard src/*.c)  \
     $(wildcard $(TREMO_SDK_PATH)/lora/mac/*.c) \
     $(TREMO_SDK_PATH)/lora/mac/region/Region.c \
     $(TREMO_SDK_PATH)/lora/mac/region/RegionCommon.c \
+    $(TREMO_SDK_PATH)/lora/mac/region/RegionAS923.c \
+    $(TREMO_SDK_PATH)/lora/mac/region/RegionAU915.c \
     $(TREMO_SDK_PATH)/lora/mac/region/RegionCN470.c \
+    $(TREMO_SDK_PATH)/lora/mac/region/RegionCN779.c \
+    $(TREMO_SDK_PATH)/lora/mac/region/RegionEU433.c \
+    $(TREMO_SDK_PATH)/lora/mac/region/RegionEU868.c \
+    $(TREMO_SDK_PATH)/lora/mac/region/RegionIN865.c \
+    $(TREMO_SDK_PATH)/lora/mac/region/RegionKR920.c \
+    $(TREMO_SDK_PATH)/lora/mac/region/RegionUS915.c \
+    $(TREMO_SDK_PATH)/lora/mac/region/RegionUS915-Hybrid.c \
     $(TREMO_SDK_PATH)/lora/linkwan/linkwan.c \
     $(TREMO_SDK_PATH)/lora/linkwan/linkwan_ica_at.c \
     $(TREMO_SDK_PATH)/lora/linkwan/lwan_config.c
