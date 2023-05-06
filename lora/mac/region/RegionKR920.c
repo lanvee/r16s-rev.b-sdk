@@ -558,22 +558,14 @@ bool RegionKR920AdrNext( AdrNextParams_t* adrNext, int8_t* drOut, int8_t* txPowO
 void RegionKR920ComputeRxWindowParameters( int8_t datarate, uint8_t minRxSymbols, uint32_t rxError, RxConfigParams_t *rxConfigParams )
 {
     double tSymbol = 0.0;
-    uint32_t radioWakeUpTime;
 
-    rxConfigParams->Datarate = datarate;
-    rxConfigParams->Bandwidth = GetBandwidth( datarate );
+    // Get the datarate, perform a boundary check
+    rxConfigParams->Datarate = MIN( datarate, KR920_RX_MAX_DATARATE );
+    rxConfigParams->Bandwidth = GetBandwidth( rxConfigParams->Datarate );
 
-    if( datarate == DR_7 )
-    { // FSK
-        tSymbol = RegionCommonComputeSymbolTimeFsk( DataratesKR920[datarate] );
-    }
-    else
-    { // LoRa
-        tSymbol = RegionCommonComputeSymbolTimeLoRa( DataratesKR920[datarate], BandwidthsKR920[datarate] );
-    }
+    tSymbol = RegionCommonComputeSymbolTimeLoRa( DataratesKR920[rxConfigParams->Datarate], BandwidthsKR920[rxConfigParams->Datarate] );
 
-    radioWakeUpTime = Radio.GetWakeupTime( );
-    RegionCommonComputeRxWindowParameters( tSymbol, minRxSymbols, rxError, radioWakeUpTime, &rxConfigParams->WindowTimeout, &rxConfigParams->WindowOffset );
+    RegionCommonComputeRxWindowParameters( tSymbol, minRxSymbols, rxError, Radio.GetWakeupTime( ), &rxConfigParams->WindowTimeout, &rxConfigParams->WindowOffset );
 }
 
 bool RegionKR920RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
